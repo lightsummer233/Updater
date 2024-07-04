@@ -474,7 +474,7 @@ class MainActivity : AppCompatActivity() {
 
                     // Show fab when click on text fields
                     if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
-                        activityMainBinding.implement.show()
+                        activityMainBinding.implement.apply { show(); shrink() }
                     }
 
                     return insets
@@ -556,7 +556,7 @@ class MainActivity : AppCompatActivity() {
                     textFields.deviceName.editText!!.removeTextChangedListener(deviceNameWatcher)
                     val text = try {
                         DeviceInfoHelper.deviceName(s.toString())
-                    } catch (ex: Exception) {
+                    } catch (_: Exception) {
                         null
                     }
                     if (text != null) {
@@ -574,7 +574,7 @@ class MainActivity : AppCompatActivity() {
                     textFields.codeName.editText!!.removeTextChangedListener(codeNameWatcher)
                     val text = try {
                         DeviceInfoHelper.codeName(s.toString())
-                    } catch (ex: Exception) {
+                    } catch (_: Exception) {
                         null
                     }
                     if (text != null) {
