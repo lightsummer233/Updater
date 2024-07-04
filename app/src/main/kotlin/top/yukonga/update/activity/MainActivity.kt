@@ -16,6 +16,10 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsAnimationCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -452,6 +456,43 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding.appBarLayout.addInsetsByPadding(left = true, right = true)
         activityMainBinding.implement.addInsetsByMargin(bottom = true, left = true, right = true)
         mainContentBinding.scrollView.addInsetsByPadding(left = true, right = true, bottom = true)
+
+        // Add animation for software keyboard
+        ViewCompat.setWindowInsetsAnimationCallback(
+            activityMainBinding.implement, object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
+                override fun onProgress(
+                    insets: WindowInsetsCompat,
+                    runningAnimations: List<WindowInsetsAnimationCompat?>
+                ): WindowInsetsCompat {
+                    val insetSystemBars = Insets.max(
+                        insets.getInsets(WindowInsetsCompat.Type.systemBars()),
+                        insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+                    )
+                    val insetIme = insets.getInsets(WindowInsetsCompat.Type.ime())
+                    val diff = Insets.subtract(insetSystemBars, insetIme)
+                    activityMainBinding.implement.translationY = if ( diff.bottom > 0 ) 0f else diff.bottom.toFloat()
+
+                    // Show fab when click on text fields
+                    if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
+                        activityMainBinding.implement.show()
+                    }
+
+                    return insets
+                }
+
+            }
+        )
+
+        // Hide fab and software keyboard when scrolling
+        mainContentBinding.scrollView.setOnScrollChangeListener { view, _, scrollY, _, oldScrollY ->
+            when {
+                scrollY > oldScrollY -> {
+                    hideKeyBoard(this@MainActivity, view)
+                    activityMainBinding.implement.hide()
+                }
+                else -> activityMainBinding.implement.show()
+            }
+        }
     }
 
     private fun setupCutoutMode() {
