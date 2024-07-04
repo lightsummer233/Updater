@@ -6,14 +6,16 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/rom_info"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="36dp"
-        android:layout_marginBottom="8dp"
-        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="42dp"
+        android:layout_marginVertical="8dp"
+        android:textColor="?colorPrimary"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:text="ROM"
+        tools:visibility="visible" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/first_info"
@@ -296,6 +298,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/download"
                 android:textColor="?attr/colorOnSurface"
